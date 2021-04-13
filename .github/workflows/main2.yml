@@ -1,13 +1,13 @@
 name: "Bump Version"
 
 on:
-  push:
+  pull_request:
     branches:
-      - "main"
-
+      - main
+      
 jobs:
   bump-version:
-    name: "Bump Version on master"
+    name: "Bump Version"
     runs-on: ubuntu-latest
 
     steps:
