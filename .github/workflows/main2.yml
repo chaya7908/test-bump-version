@@ -15,21 +15,25 @@ jobs:
         uses: "actions/checkout@v2"
         with:
           ref: ${{ github.ref }}
-      - name: "cat package.json"
-        run: cat ./package.json
-      - name: "Setup Node.js"
-        uses: "actions/setup-node@v1"
-        with:
-          node-version: 12
-      - name: "Automated Version Bump"
-        uses: "phips28/gh-action-bump-version@master"
-        with:
-          tag-prefix: ''
-          minor-wording:  'add,Adds,new'
-          major-wording:  'MAJOR,cut-major'
-          patch-wording:  'patch,fixes'     # Providing patch-wording will override commits
+#       - name: "Setup Node.js"
+#         uses: "actions/setup-node@v1"
+#         with:
+#           node-version: 12
+#       - name: "Automated Version Bump"
+#         uses: "phips28/gh-action-bump-version@master"
+#         with:
+#           tag-prefix: ''
+#           minor-wording:  'add,Adds,new'
+#           major-wording:  'MAJOR,cut-major'
+#           patch-wording:  'patch,fixes'     # Providing patch-wording will override commits
 
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
-      - name: "cat package.json"
-        run: cat ./package.json
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
+      - name: Bump version if release label
+        if: github.event.label.name == 'major' || github.event.label.name == 'minor' || github.event.label.name == 'patch'
+        run: |
+          npm version ${{ github.event.label.name }} --no-git-tag-version
+          git commit -am 'update(package.json):bump ${{ github.event.label.name }} version'
+          remote_repo="https://${{ github.actor }}:${{ secrets.TOKEN_ACTION }}@github.com/${{ github.repository }}.git"
+          git push "${remote_repo}"
+
