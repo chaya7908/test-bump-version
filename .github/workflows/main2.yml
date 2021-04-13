@@ -1,9 +1,9 @@
 name: "Bump Version"
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [closed]
+
 #     paths-ignore:
 #       - 'package.json'
 #       - 'CHANGELOG.md'
@@ -22,7 +22,7 @@ jobs:
         run: |
            echo ${{ github.event.pull_request.labels }}
       - name: Bump version if release label
-        if: contains(github.event.pull_request.labels.*.name, 'patch')
+        if: github.event.pull_request.merged == 'true' # contains(github.event.pull_request.labels.*.name, 'patch')
         run: |
           npm version patch --no-git-tag-version
           git config --global user.email "example@github.com"
