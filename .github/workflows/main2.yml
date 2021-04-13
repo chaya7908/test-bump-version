@@ -22,7 +22,7 @@ jobs:
         run: |
            echo ${{ github.event.pull_request.labels }}
       - name: Bump version if release label
-        if: github.event.label.name == 'major' || github.event.label.name == 'minor' || github.event.label.name == 'patch'
+        if: contains(github.event.pull_request.labels.*.name, 'patch')
         run: |
           npm version patch --no-git-tag-version
           git config --global user.email "example@github.com"
