@@ -1,0 +1,42 @@
+dist: trusty
+
+os: linux
+
+language: node_js
+node_js:
+  - '15.5.0'
+cache:
+  npm: false
+
+env:
+  global:
+    - PROJECT: metorikku-cli
+    - npm_config_platform: linux
+    - npm_config_target_platform: linux
+    - TARGET: linux-x64
+
+before_install:
+  - curl -u $JFROG_USER:$JFROG_PASSWORD https://yotpo.jfrog.io/yotpo/api/npm/auth > .npmrc
+  - npm config set registry https://yotpo.jfrog.io/yotpo/api/npm/npm-vrt/
+
+stages:
+  - Bump Version
+  - Deploy
+
+
+jobs:
+  include:
+    - stage: Test
+      script: npm test
+    - stage: Bump Version
+      if: type = pull_request
+      script:
+        - echo "here"
+#     - stage: Deploy
+#       if: branch = master
+#       script:
+#         - sudo apt-get update
+#         - sudo apt-get install p7zip-full
+#         - oclif-dev pack --targets=$TARGET
+#         - oclif-dev publish --targets=$TARGET
+#         - npm publish
