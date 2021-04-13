@@ -18,22 +18,9 @@ jobs:
         uses: "actions/checkout@v2"
         with:
           ref: ${{ github.ref }}
-#       - name: "Setup Node.js"
-#         uses: "actions/setup-node@v1"
-#         with:
-#           node-version: 12
-#       - name: "Automated Version Bump"
-#         uses: "phips28/gh-action-bump-version@master"
-#         with:
-#           tag-prefix: ''
-#           minor-wording:  'add,Adds,new'
-#           major-wording:  'MAJOR,cut-major'
-#           patch-wording:  'patch,fixes'     # Providing patch-wording will override commits
 
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
       - name: Bump version if release label
-        if: true
+        if: github.event.label.name == 'major' || github.event.label.name == 'minor' || github.event.label.name == 'patch'
         run: |
           npm version patch --no-git-tag-version
           git config --global user.email "example@github.com"
