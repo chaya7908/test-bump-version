@@ -33,7 +33,7 @@ jobs:
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
       - name: Bump version if release label
-#         if: github.event.label.name == 'major' || github.event.label.name == 'minor' || github.event.label.name == 'patch'
+        if: true #github.event.label.name == 'major' || github.event.label.name == 'minor' || github.event.label.name == 'patch'
         run: |
           npm version patch --no-git-tag-version
           git commit -am 'update(package.json):bump ${{ github.event.label.name }} version'
