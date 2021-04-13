@@ -33,10 +33,11 @@ jobs:
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
       - name: Bump version if release label
-        if: true #github.event.label.name == 'major' || github.event.label.name == 'minor' || github.event.label.name == 'patch'
+        if: true
         run: |
           npm version patch --no-git-tag-version
+          git config --global user.email "example@github.com"
+          git config --global user.name "example"
           git commit -am 'update(package.json):bump ${{ github.event.label.name }} version'
-          remote_repo="https://${{ github.actor }}:${{ secrets.TOKEN_ACTION }}@github.com/${{ github.repository }}.git"
+          remote_repo="https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push "${remote_repo}"
-
